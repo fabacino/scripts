@@ -1,0 +1,16 @@
+#!/bin/bash
+# Pipe input to emacs through a temporary file
+
+# Process arguments
+args='-n'
+while [[ $1 ]]
+do
+    # Start a new frame if the --create option is given
+    if [ "$1" == '-c' ] || [ "$1" == '--create' ]; then
+        args="${args}c"
+    fi
+    shift
+done
+
+# Create temporary file, open it with emacs, delete it afterwards
+TMP=$(mktemp) && cat > $TMP && emacsclient $args $TMP ; rm $TMP
